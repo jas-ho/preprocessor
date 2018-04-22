@@ -113,9 +113,9 @@ def test__spell_correct_text__unknown_input():
 # explicit tests
 @pytest.mark.spell_correct
 def test__spell_correct__json_input():
-    json_in_path = os.path.join(test_dir,
+    json_in_path = os.path.join(test_dir, 'data',
                                 'challenge_json_input_format.json')
-    json_out_path = os.path.join(test_dir,
+    json_out_path = os.path.join(test_dir, 'data',
                                  'challenge_output_spellchecker.json')
 
     json_out = spell_correct(json_in_path, output_file=json_out_path)
