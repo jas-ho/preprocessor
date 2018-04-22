@@ -1,0 +1,45 @@
+{
+    "Das ist ein einfcher Tset": {
+        "spellingcorrections": [
+            {
+                "Das ist ein einfacher Test": {
+                    "confidence": 1.0,
+                    "postagger": [
+                        {
+                            "Das": "ART"
+                        },
+                        {
+                            "ist": "VAFIN"
+                        },
+                        {
+                            "ein": "ART"
+                        },
+                        {
+                            "einfacher": "ADJA"
+                        },
+                        {
+                            "Test": "NN"
+                        }
+                    ],
+                    "lemmatization": [
+                        {
+                            "Das": "das"
+                        },
+                        {
+                            "ist": "sein"
+                        },
+                        {
+                            "ein": "ein"
+                        },
+                        {
+                            "einfacher": "einfach"
+                        },
+                        {
+                            "Test": "Test"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
