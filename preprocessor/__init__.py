@@ -1,1 +1,1 @@
-from .spell_correction import spell_correct_word
+from .spell_correction import spell_correct_word, spell_correct_text

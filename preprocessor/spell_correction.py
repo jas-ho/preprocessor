@@ -1,20 +1,60 @@
 import hunspell
-import editdistance
 import os
+import itertools
+from numpy import prod
 
 
 # MAIN FUNCTION #
+def spell_correct_text(text, flag_corrected=False, max_suggestions=10):
+    """
+    Take `text` and return
+    - list of suggested spelling corrections (:str) for `text`
+    - list of confidences (:float) in the corresponding correction.
+
+    max_suggestions (default: 10): maximum number of returned suggestions
+
+    If `flag_corrected` is True (default: False):
+    Surround corrected words  with '*'.
+    ("corrected words" are suggested words which are not equal to input word)
+    """
+    suggs = []
+    confs = []
+
+    for word in word_tokenize(text):
+        sugg, conf = spell_correct_word(word, return_confidences=True)
+        suggs.append(sugg)
+        confs.append(conf)
+
+    # all suggested sentences are obtained by
+    #  detokenizing the Cartesian product of
+    #  the list of all suggestions per word
+    suggs = [words_detokenize(sent_list)
+             for sent_list in itertools.product(*suggs)]
+
+    # corresponding confidences are obtained by
+    #  multiplying the confidences for each word
+    confs = [prod(conf_list)
+             for conf_list in itertools.product(*confs)]
+
+    # sort suggestions and confidences by confidence
+    confs, suggs = zip(*sorted(zip(confs, suggs), reverse=True))
+    confs = list(confs)
+    suggs = list(suggs)
+
+    return suggs[:max_suggestions], confs[:max_suggestions]
+
+
 def spell_correct_word(word, flag_corrected=False, return_confidences=False):
     """
     Take `word` and return a list of spell-corrected versions of `word`.
     If `word` is correctly spelled, return [`word`].
 
     If `return_confidences` is True (default: False):
-        Return list of confidences (floats between zero and 1) as second output.
+    Return list of confidences (floats between zero and 1) as second output.
 
     If `flag_corrected` is True (default: False):
-        Surround corrected words  with '*'.
-        ("corrected words" are suggested words which are not equal to input word)
+    Surround corrected words  with '*'.
+    ("corrected words" are suggested words which are not equal to input word)
     """
     spell_is_correct = spellchecker.spell(word)
     if spell_is_correct:
@@ -46,10 +86,17 @@ def spell_correct_word(word, flag_corrected=False, return_confidences=False):
 
 
 # AUXILIARY FUNCTIONS #
+# hunspell-spellchecker
 dir_path = os.path.dirname(os.path.realpath(__file__))
 hunspell_folder = os.path.join(dir_path, '..', 'data', 'hunspell')
 spellchecker = hunspell.HunSpell(os.path.join(hunspell_folder, 'de_DE.dic'),
                                  os.path.join(hunspell_folder, 'de_DE.aff'))
+
+from nltk import word_tokenize
+from nltk.tokenize.moses import MosesDetokenizer
+detokenizer = MosesDetokenizer()
+def words_detokenize(words):
+    return detokenizer.detokenize(words, return_str=True)
 
 
 def flag_words_if_different(words, reference_word):
@@ -63,24 +110,3 @@ def flag_words_if_different(words, reference_word):
     """
     return [('*' + word + '*') if (word != reference_word) else word
             for word in words]
-
-
-# CURRENTLY UNUSED #
-def get_confidence(sugg, pos, word):
-    """
-    Return confidence (:float) in suggested correction `sugg` for `word`
-    based on
-    - Levenshtein edit distance between `sugg` and `word`
-    - position `pos` at which `sugg` appears in list of hunspell-suggestions
-    """
-    conf_edit_dist = normed_inv_edit_dist(sugg, word)
-    conf_hunspell_order = 1 / (pos + 1)
-    return conf_edit_dist * conf_hunspell_order
-
-
-def normed_inv_edit_dist(word1, word2):
-    """
-    Return 1/(1 + dist(word1, word2)).
-    dist(word1, word2): Levenshtein edit distance between `word1` and `word2`.
-    """
-    return 1 / (1 + editdistance.eval(word1, word2))
