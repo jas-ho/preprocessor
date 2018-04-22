@@ -1,9 +1,11 @@
-from .context import spell_correct_word, spell_correct_text
+from .context import test_dir, spell_correct_word, spell_correct_text, spell_correct
+import os
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 import numpy
-
+import json
+from pprint import pprint
 
 # UNIT TESTS: spell_correct_word #
 # parametrized tests via hypothesis
@@ -105,3 +107,33 @@ def test__spell_correct_text__unknown_input():
     assert sugg == [unknown_text], \
         """Unrecognized text for which no suggestions are found:
         Unrecognized text should be returned as sole suggestion."""
+
+
+# INTEGRATION TESTS: spell_correct #
+# explicit tests
+@pytest.mark.spell_correct
+def test__spell_correct__json_input():
+    json_in_path = os.path.join(test_dir,
+                                'challenge_json_input_format.json')
+    json_out_path = os.path.join(test_dir,
+                                 'challenge_output_spellchecker.json')
+
+    json_out = spell_correct(json_in_path, output_file=json_out_path)
+    assert json_out == json.loads(json.dumps(json_out)),\
+        "Output must be convertible to valid json."
+
+    json_in = json.load(open(json_in_path))
+    for sent in json_in["input"]:
+        assert sent in json_out, \
+            "Every input sentence should be a key in the output structure."
+
+        suggestions = json_out[sent]["spellingcorrections"]
+
+        # for every input sentence, the confidences in suggested corrections
+        #  are monotonically decreasing and smaller than 1
+        conf_old = 1.
+        for sugg_dict in suggestions:
+            sugg = list(sugg_dict.keys())[0]
+            conf = sugg_dict[sugg]["confidence"]
+            assert conf <= conf_old
+            conf_old = conf
