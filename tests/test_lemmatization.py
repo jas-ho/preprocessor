@@ -17,7 +17,8 @@ allowed_chars = st.characters(
 @given(st.text(allowed_chars, min_size=1))
 @pytest.mark.lemmatize_sentence
 def test__lemmatize_sentence__return_type(sent):
-    lemmatized = lemmatize_sentence(sent)
+    postagged = pos_tag_sentence(sent)
+    lemmatized = lemmatize_sentence(postagged)
     assert type(lemmatized) is list
     assert type(lemmatized[0]) is tuple
     assert len(lemmatized[0]) == 2
@@ -30,7 +31,7 @@ def test__lemmatize_sentence__explicit():
     sent_in = "Ein Mann."
     postagged_sent = pos_tag_sentence(sent_in)
     lemmatized = lemmatize_sentence(postagged_sent)
-    assert lemmatized == [('Ein', 'ART'), ('Mann', 'NN'), ('.', '$.')]
+    assert lemmatized == [('Ein', 'ein'), ('Mann', 'Mann'), ('.', '--')]
 
 
 # INTEGRATION TESTS: lemmatize #

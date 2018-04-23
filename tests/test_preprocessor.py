@@ -8,7 +8,6 @@ import json
 
 # INTEGRATION TESTS: preprocess #
 @pytest.mark.preprocess
-@pytest.mark.current
 def test__spell_correct__json_input():
     path_in = os.path.join(test_dir, 'data',
                            'challenge_json_input_format.json')
