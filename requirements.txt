@@ -1,0 +1,16 @@
+cloudpickle               0.5.2
+freetype                  2.8
+future                    0.16.0
+gstreamer                 1.12.4
+hunspell                  0.5.4
+hypothesis                3.56.0
+jsonschema                2.6.0
+jupyter_core              4.4.0
+mkl_random                1.0.1
+more-itertools            4.1.0
+nltk                      3.2.5
+numpy                     1.14.2
+pcre                      8.42
+pickleshare               0.7.4
+pytest                    3.5.0
+readline                  7.0
