@@ -37,7 +37,6 @@ def test__pos_tag_sentence__explicit():
 
 
 # INTEGRATION TESTS: pos_tag #
-@pytest.mark.current
 @pytest.mark.pos_tag
 def test__spell_correct__json_input():
     json_in = os.path.join(test_dir, 'data',
