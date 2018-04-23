@@ -25,12 +25,19 @@ def test__pos_tag_sentence__return_type(sent):
 # explicit tests
 @pytest.mark.pos_tag_sentence
 def test__pos_tag_sentence__explicit():
-    sent_in = "Ein Mann."
+    sent_in = "Ein Ei und noch ein Ei."
     tagged = pos_tag_sentence(sent_in)
-    assert tagged == [('Ein', 'ART'), ('Mann', 'NN'), ('.', '$.')]
+    assert tagged == [('Ein', 'ART'),
+                      ('Ei', 'NN'),
+                      ('und', 'KON'),
+                      ('noch', 'ADV'),
+                      ('ein', 'ART'),
+                      ('Ei', 'NN'),
+                      ('.', '$.')]
 
 
 # INTEGRATION TESTS: pos_tag #
+@pytest.mark.current
 @pytest.mark.pos_tag
 def test__spell_correct__json_input():
     json_in = os.path.join(test_dir, 'data',
@@ -47,8 +54,16 @@ def test__spell_correct__json_input():
         assert sent in json_pos_tagged, \
             "Every input sentence should be a key in the output structure."
 
-        suggestions = json_pos_tagged[sent]["spellingcorrections"]
+    # find a correct input sentence with duplicate words
+    sent = "Ein Ei und noch ein Ei."
+    suggestions = json_pos_tagged[sent]["spellingcorrections"]
+    best_sugg = suggestions[0]
+    assert sent in best_sugg, 'First suggestion should be input if input is correct'
 
-        for sugg_dict in suggestions:
-            sugg = list(sugg_dict.keys())[0]
-            postags = sugg_dict[sugg]["postagger"]
+    assert best_sugg[sent]["postagger"] == [{'Ein': 'ART'},
+                                            {'Ei': 'NN'},
+                                            {'und': 'KON'},
+                                            {'noch': 'ADV'},
+                                            {'ein': 'ART'},
+                                            {'Ei': 'NN'},
+                                            {'.': '$.'}]

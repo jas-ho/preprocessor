@@ -36,8 +36,8 @@ def pos_tag(json_in, output_file=None):
         for corr in corrections:
             corr_sent = list(corr.keys())[0]
             tagged_sent = pos_tag_sentence(corr_sent)
-            corr_dict = corr[corr_sent]
-            corr_dict["postagger"] = dict(tagged_sent)
+            ts_list_of_dicts = [{tok: pos} for (tok, pos) in tagged_sent]
+            corr[corr_sent]["postagger"] = ts_list_of_dicts
 
     if output_file:
         with open(output_file, 'w') as f:
