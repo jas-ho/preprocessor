@@ -93,8 +93,10 @@ def spell_correct_text(text, flag_corrected=False, max_suggestions=10):
     # all suggested sentences are obtained by
     #  detokenizing the Cartesian product of
     #  the list of all suggestions per word
-    suggs = [words_detokenize(sent_list)
-             for sent_list in itertools.product(*suggs)]
+    #  NOTE: don't yet detokenize at this stage
+    #   cause not all sentences will be returned
+    #   and detokenizing is costly
+    suggs = itertools.product(*suggs)
 
     # corresponding confidences are obtained by
     #  multiplying the confidences for each word
@@ -103,10 +105,16 @@ def spell_correct_text(text, flag_corrected=False, max_suggestions=10):
 
     # sort suggestions and confidences by confidence
     confs, suggs = zip(*sorted(zip(confs, suggs), reverse=True))
-    confs = list(confs)
-    suggs = list(suggs)
 
-    return suggs[:max_suggestions], confs[:max_suggestions]
+    # keep only the needed suggestions
+    confs = list(confs[:max_suggestions])
+    suggs = list(suggs[:max_suggestions])
+
+    # detokenize suggested sentences
+    #  (only those which are actually needed)
+    suggs = list(map(words_detokenize, suggs))
+
+    return suggs, confs
 
 
 def spell_correct_word(word, flag_corrected=False,

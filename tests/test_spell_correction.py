@@ -88,7 +88,7 @@ def test__spell_correct_text__return_type(word):
 # explicit tests
 @pytest.mark.spell_correct_text
 def test__spell_correct_text__correct_input():
-    correct_sent = 'A'
+    correct_sent = 'Das ist ein einfacher Test.'
     suggs, confs = spell_correct_text(correct_sent)
     assert suggs[0] == correct_sent, \
         "First suggestion should be input text if input text is correct."
