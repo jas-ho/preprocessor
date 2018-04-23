@@ -4,9 +4,7 @@ This python repository contains tools for a simple preprocessing pipeline for NL
 It implements the following main functions
 - `spell_correct`: a wrapper for the hunspell-spellchecker
 - `pos_tag`: a pos-tagger trained with data from the TIGER corpus
-- STILL MISSING: `lemmatize`: a lemmatizer based on (amongst others)
--- lookup from the tiger corpus,
--- lemmatization via the pattern.de module
+- `lemmatize`: a lemmatizer based on lookup from the tiger corpus. (Note: This still needs to be supplemented with fall-back methods such as lemmatization via the pattern.de module).
 
 The full end-to-end pipeline is provided by the function `preprocess`.
 
