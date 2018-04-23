@@ -1,8 +1,8 @@
 from .context import test_dir, spell_correct_word, spell_correct_text, spell_correct
-import os
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
+import os
 import numpy
 import json
 from pprint import pprint
