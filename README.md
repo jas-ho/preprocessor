@@ -41,3 +41,9 @@ Tests are stored in the sub-folder ./tests. They can be run using pytest as foll
 ```
 cd tests && pytest
 ```
+
+## References
+- http://www.nltk.org/book/ch06.html as general introduction
+- https://datascience.blog.wzb.eu/2016/07/13/autocorrecting-misspelled-words-in-python-using-hunspell/ for how to use the python-wrapper for hunspell
+- https://datascience.blog.wzb.eu/2016/07/13/accurate-part-of-speech-tagging-of-german-texts-with-nltk/ for how to train a POS-tagger using the TIGER corpus  (relying on the German tagger classifier from Philipp Nolte)
+- https://datascience.blog.wzb.eu/2017/05/19/lemmatization-of-german-language-text/ for how to implement improved lemmatization (a reference implementation was provided here: https://github.com/WZBSocialScienceCenter/germalemma)
