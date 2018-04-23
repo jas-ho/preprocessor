@@ -28,6 +28,10 @@ Note that input.json is expected to be in the following format:
     - a single key: "input"
     - corresponding value: list of German input sentences s1, s2,... :str.
 
+Example files which demonstrate the assumed format are
+- [challenge_json_input_format.json](tests/data/challenge_json_input_format.json) for the input and 
+- [challenge_json_output_format.json](tests/data/challenge_json_output_format.json) for the output
+
 ### Prerequisites
 
 The python packages which are explicitly imported and their versions are listed in [requirements.txt](requirements.txt)
