@@ -131,6 +131,6 @@ def lemmata_adjective(word):
     for full, reduced in ADJ_SUFFIXES_DICT.items():
         if word.endswith(full):
             lemma = (word[:-len(full)] + reduced).lower()
-            return lower
+            return lemma
 
     return None
