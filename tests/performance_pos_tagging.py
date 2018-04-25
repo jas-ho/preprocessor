@@ -10,21 +10,21 @@ from context import words_detokenize
 #  on test data from the TIGER corpus
 
 # load test_data
-train_file = os.path.join(data_dir, 'pickles', 'TIGER_train.pickle')
-with open(train_file, 'rb') as f:
-    train_sents = pickle.load(f)
+test_file = os.path.join(data_dir, 'pickles', 'TIGER_test.pickle')
+with open(test_file, 'rb') as f:
+    test_sents = pickle.load(f)
 
 def remove_lemma(sents):
     # only first (word) and second entry (POS-tag) for each tuple are of interest
     firsttwo = (lambda mytuple: mytuple[:2])
     return list(map((lambda mylist: list(map(firsttwo, mylist))), sents))
 
-train_sents = remove_lemma(train_sents)
+test_sents = remove_lemma(test_sents)
 
 # loop over test data
 tag_no = 0
 success_no = 0
-for tagged_sent in train_sents[:1000]:
+for tagged_sent in test_sents[:1000]:
     sent, tags = zip(*tagged_sent)
     tagged_sent_out = pos_tag_sentence(words_detokenize(sent))
     sent_out, tags_out = zip(*tagged_sent_out)
