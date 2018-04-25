@@ -1,5 +1,6 @@
 from context import spell_correct_word, spell_correct_text, spell_correct
 from context import misspell_word
+from context import data_dir
 # this script measures the performance of the spell checker by
 #  - choosing a word from a list of correct German words
 #  - applying a random misspelling to it
@@ -13,23 +14,17 @@ import pickle
 import random
 
 
-# load correct words
-test_dir = os.path.abspath(os.path.dirname(__file__))
-module_dir = os.path.abspath(os.path.join(test_dir, '..'))
-data_dir = os.path.join(module_dir, 'data')
-
-file = os.path.join(data_dir, 'pickles', 'correct_words.pickle')
-with open(file, 'rb') as f:
-    correct_words = pickle.load(f)
-
-assert len(correct_words) == 22390
-
+def load_random_correct_words(word_no=100):
+    file = os.path.join(data_dir, 'pickles', 'correct_words.pickle')
+    with open(file, 'rb') as f:
+        correct_words = pickle.load(f)
+    assert len(correct_words) == 22390
+    random.shuffle(correct_words)
+    return correct_words[:word_no]
 
 # measure performance of spellchecker on randomly chosen subset of correct words
-random.shuffle(correct_words)
-test_words = correct_words[:100]
-
-best_suggestion = lambda word: spell_correct_word(word)[0]
+test_words = load_random_correct_words(word_no=100)
+best_suggestion = lambda word: spell_correct_word(word, max_suggestions=1)[0]
 ## uncomment the following to demonstrate that all test words are recognizedd
 ##  if we don't introduce additional misspellings
 # suggestions = list(map(best_suggestion, test_words))
