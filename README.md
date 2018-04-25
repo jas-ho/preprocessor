@@ -4,7 +4,7 @@ This python repository contains tools for a simple preprocessing pipeline for NL
 It implements the following main functions
 - `spell_correct`: a wrapper for the hunspell-spellchecker
 - `pos_tag`: a pos-tagger trained with data from the TIGER corpus
-- `lemmatize`: a lemmatizer based on lookup from the tiger corpus. (Note: This still needs to be supplemented with fall-back methods such as lemmatization via the pattern.de module).
+- `lemmatize`: a lemmatizer based on lookup from the tiger corpus or, for adjectives, on lookup in a suffix-dictionary (Note: This still needs to be supplemented with fall-back methods such as lemmatization via the pattern.de module).
 
 The full end-to-end pipeline is provided by the function `preprocess`.
 
@@ -27,7 +27,7 @@ Note that input.json is expected to be in the following format:
     - corresponding value: list of German input sentences s1, s2,... :str.
 
 Example files which demonstrate the assumed format are
-- [challenge_json_input_format.json](tests/data/challenge_json_input_format.json) for the input and 
+- [challenge_json_input_format.json](tests/data/challenge_json_input_format.json) for the input and
 - [challenge_json_output_format.json](tests/data/challenge_json_output_format.json) for the output
 
 ### Prerequisites

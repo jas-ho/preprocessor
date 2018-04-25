@@ -14,6 +14,47 @@ except:
     with open(tagger_file, 'rb') as f:
         lemmata_dict = pickle.load(f)
 
+
+### suffix-dict copied from https://github.com/WZBSocialScienceCenter/germalemma/blob/master/germalemma.py
+# German language adjective suffixes
+ADJ_SUFFIXES_BASE = (
+    'bar',
+    'haft',
+    'ig',
+    'isch',
+    'lich',
+    'los',
+    'sam',
+    'en',
+    'end',
+    'ern'
+)
+
+ADJ_SUFFIXES_FLEX = (
+    'e',
+    'er',
+    'es',
+    'en',
+    'em',
+    'ere',
+    'erer',
+    'eres',
+    'eren',
+    'erem',
+    'ste',
+    'ster',
+    'stes',
+    'sten',
+    'stem',
+)
+
+ADJ_SUFFIXES_DICT = {}
+
+for suffix in ADJ_SUFFIXES_BASE:
+    for flex in ADJ_SUFFIXES_FLEX:
+        ADJ_SUFFIXES_DICT[suffix + flex] = suffix
+###
+
 # MAIN FUNCTION #
 def lemmatize(json_in, output_file=None):
     """
@@ -65,9 +106,13 @@ def lemmatize_word(postagged_word):
     if lemma:
         return (word, lemma)
 
-    # next: ....
+    # next: if the word is an adjective try to find its base form
+    if POStag.startswith('ADJ'):
+        lemma = lemmata_adjective(word)
+        if lemma:
+            return (word, lemma)
 
-    # if all else fails..
+    # if no method was successful
     return (word, '???')
 
 
@@ -78,3 +123,14 @@ def lemmata_lookup(word):
         return lemmata_dict[word]
     else:
         return None
+
+
+def lemmata_adjective(word):
+    """Try to find suffix of word in dict and return its base form"""
+    # taken from germalemma.py
+    for full, reduced in ADJ_SUFFIXES_DICT.items():
+        if word.endswith(full):
+            lemma = (word[:-len(full)] + reduced).lower()
+            return lower
+
+    return None

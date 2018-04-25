@@ -1,6 +1,7 @@
 from .context import test_dir, spell_correct, \
                      pos_tag_sentence, pos_tag, \
-                     lemmatize, lemmatize_sentence
+                     lemmatize, lemmatize_sentence, lemmatize_word
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
@@ -8,7 +9,20 @@ import os
 import json
 
 
-# UNIT TESTS: pos_tag_sentence #
+# UNIT TESTS: lemmatize_word #
+# explicit tests
+@pytest.mark.current
+@pytest.mark.lemmatize_word
+def test__lemmatize_word__explicit():
+    for word, pos_tag, lemma in [('Männer', 'NN', 'Mann'),
+                        ('Schöner', 'ADJA', 'schön'),
+                        ('wunderbarer', 'ADJA', 'wunderbar')]:
+        postagged_word = (word, pos_tag)
+        returned_word, returned_lemma = lemmatize_word(postagged_word)
+        assert returned_word == word
+        assert returned_lemma == lemma
+
+# UNIT TESTS: lemmatize_sentence #
 # parametrized tests via hypothesis
 allowed_chars = st.characters(
     max_codepoint=200, whitelist_categories=('Lu', 'Ll'))
@@ -35,7 +49,6 @@ def test__lemmatize_sentence__explicit():
 
 
 # INTEGRATION TESTS: lemmatize #
-@pytest.mark.current
 @pytest.mark.lemmatize
 def test__spell_correct__json_input():
     in_file = os.path.join(test_dir, 'data',
